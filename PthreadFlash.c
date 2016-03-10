@@ -8,15 +8,15 @@
 #define LENTH 4
 
 char buffer[SIZE];
-pthread_mutex_t mutex;                                        //ÉèÖÃ³õÊ¼»¯»¥³âÁ¿
-pthread_cond_t cond = PTHREAD_COND_INITIALIZER;               //ÉèÖÃÏß³Ì¹ÒÆğºÍ»Ø¸´µÄÌõ¼ş±äÁ¿
+pthread_mutex_t mutex;                                        //è®¾ç½®åˆå§‹åŒ–äº’æ–¥é‡
+pthread_cond_t cond = PTHREAD_COND_INITIALIZER;               //è®¾ç½®çº¿ç¨‹æŒ‚èµ·å’Œå›å¤çš„æ¡ä»¶å˜é‡
 
 
 void *thread_play_0(void *arg);                         
 
 
 
-void Error_print(int num,char *pStr)                      //·â×°Ò»¸ö¼ì²âº¯Êı£¬Ö÷Òª¼ì²âÏß³ÌµÄ½¨Á¢µÈÒ»ÏµÁĞ²Ù×÷ÊÇ·ñÕıÈ·
+void Error_print(int num,char *pStr)                      //å°è£…ä¸€ä¸ªæ£€æµ‹å‡½æ•°ï¼Œä¸»è¦æ£€æµ‹çº¿ç¨‹çš„å»ºç«‹ç­‰ä¸€ç³»åˆ—æ“ä½œæ˜¯å¦æ­£ç¡®
 {
 	if(num != 0) {
 		perror(pStr);
@@ -28,13 +28,13 @@ int main(void)
 {
 	int ret;
 	int i = 0;
-	pthread_t id;                             //´´½¨Ïß³Ì
-	pthread_attr_t thread_attr;               //ÉèÖÃÏß³ÌÊôĞÔ
+	pthread_t id;                             //åˆ›å»ºçº¿ç¨‹
+	pthread_attr_t thread_attr;               //è®¾ç½®çº¿ç¨‹å±æ€§
 	
 	ret = pthread_attr_init(&thread_attr);  
 	Error_print(ret,"Init error\n");
 
-	ret = pthread_attr_setdetachstate(&thread_attr, PTHREAD_CREATE_DETACHED);  //ÉèÏß³ÌÊôĞÔÎªÍÑÀë£¬Ïß³Ì½áÊøºó²»ĞèÒª·µ»Ø£¬ÄÜÔÚºóÌ¨ÓëÖ÷ÏßÍ¬Ê±Ö´ĞĞ 
+	ret = pthread_attr_setdetachstate(&thread_attr, PTHREAD_CREATE_DETACHED);  //è®¾çº¿ç¨‹å±æ€§ä¸ºè„±ç¦»ï¼Œçº¿ç¨‹ç»“æŸåä¸éœ€è¦è¿”å›ï¼Œèƒ½åœ¨åå°ä¸ä¸»çº¿åŒæ—¶æ‰§è¡Œ 
 	Error_print(ret,"Init error\n");
 
 	ret = pthread_mutex_init(&mutex,NULL);
@@ -43,14 +43,14 @@ int main(void)
 	ret = pthread_create(&id, &thread_attr,thread_play_0,NULL);
 	Error_print(ret,"Create error\n");
 	
-	while(scanf("%s",buffer)) {                     //ÉèÖÃ»Ö¸´ºÍÍË³öÌõ¼ş
-		if(strncmp("stop",buffer,LENTH) == 0) {      //ÍË³ö
+	while(scanf("%s",buffer)) {                     //è®¾ç½®æ¢å¤å’Œé€€å‡ºæ¡ä»¶
+		if(strncmp("stop",buffer,LENTH) == 0) {      //é€€å‡º
 			pthread_mutex_lock(&mutex); 
-		    printf("-------Goodbye-------\n");
+		        printf("-------Goodbye-------\n");
 			sleep(1);  
 			break;
 		}
-		if(strncmp("start",buffer,TIMER) == 0) {      //»Ö¸´Ïß³Ì
+		if(strncmp("start",buffer,TIMER) == 0) {      //æ¢å¤çº¿ç¨‹
 			pthread_mutex_lock(&mutex);
 			pthread_cond_signal(&cond);
 			pthread_mutex_unlock(&mutex);
@@ -64,19 +64,19 @@ int main(void)
 }
 
 
-void *thread_play_0(void *arg)        //Ïß³ÌÖ´ĞĞº¯Êı
+void *thread_play_0(void *arg)        //çº¿ç¨‹æ‰§è¡Œå‡½æ•°
 {
 	 while (1)  
     {  
-        pthread_mutex_lock(&mutex);     //Ñ­»·´òÓ¡
+        pthread_mutex_lock(&mutex);     //å¾ªç¯æ‰“å°
         printf("It's a flash,input stop to stop,input pause to pause.\n");  
         pthread_mutex_unlock(&mutex); 
 		sleep(1);  
 
-		if (strncmp("stop", buffer, LENTH) == 0) {              //ÍË³öÏß³Ì
+		if (strncmp("stop", buffer, LENTH) == 0) {              //é€€å‡ºçº¿ç¨‹
             break;  
         }
-		if (strncmp("pause", buffer, TIMER) == 0) {             //¹ÒÆğÏß³Ì
+		if (strncmp("pause", buffer, TIMER) == 0) {             //æŒ‚èµ·çº¿ç¨‹
 			strcpy(buffer," ");
 			pthread_mutex_lock(&mutex);
 			printf("---------Flash is paused---------\n");
