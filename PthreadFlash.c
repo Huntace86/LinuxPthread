@@ -57,9 +57,7 @@ int main(void)
 		}
 	}
 
-    exit(EXIT_SUCCESS);
-
-
+    	exit(EXIT_SUCCESS);
 }
 
 
@@ -73,7 +71,7 @@ void *thread_play_0(void *arg)        //线程执行函数
 	sleep(1);  
 
 	if (strncmp("stop", buffer, LENTH) == 0) {              //退出线程
-            break;  
+            	break;  
         }
 	if (strncmp("pause", buffer, TIMER) == 0) {             //挂起线程
 		strcpy(buffer," ");
