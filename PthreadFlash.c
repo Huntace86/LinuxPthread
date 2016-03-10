@@ -65,26 +65,26 @@ int main(void)
 
 void *thread_play_0(void *arg)        //线程执行函数
 {
-	 while (1)  
+    while (1)  
     {  
         pthread_mutex_lock(&mutex);     //循环打印
         printf("It's a flash,input stop to stop,input pause to pause.\n");  
         pthread_mutex_unlock(&mutex); 
-		sleep(1);  
+	sleep(1);  
 
-		if (strncmp("stop", buffer, LENTH) == 0) {              //退出线程
+	if (strncmp("stop", buffer, LENTH) == 0) {              //退出线程
             break;  
         }
-		if (strncmp("pause", buffer, TIMER) == 0) {             //挂起线程
-			strcpy(buffer," ");
-			pthread_mutex_lock(&mutex);
-			printf("---------Flash is paused---------\n");
-			printf("Input start to play the flash again.\n");
-			pthread_cond_wait(&cond,&mutex);
-			pthread_mutex_unlock(&mutex);
-		}
+	if (strncmp("pause", buffer, TIMER) == 0) {             //挂起线程
+		strcpy(buffer," ");
+		pthread_mutex_lock(&mutex);
+		printf("---------Flash is paused---------\n");
+		printf("Input start to play the flash again.\n");			
+		pthread_cond_wait(&cond,&mutex);
+		pthread_mutex_unlock(&mutex);
+	}
     }  
-	pthread_exit(NULL);
+    pthread_exit(NULL);
 }
 
 
