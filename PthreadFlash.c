@@ -27,7 +27,6 @@ void Error_print(int num,char *pStr)                      //封装一个检测�
 int main(void)
 {
 	int ret;
-	int i = 0;
 	pthread_t id;                             //创建线程
 	pthread_attr_t thread_attr;               //设置线程属性
 	
